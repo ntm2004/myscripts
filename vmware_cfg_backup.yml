@@ -10,12 +10,12 @@
        password: '{{ password }}'
        validate_certs: no
        state: saved
-       dest: /home/admin/backup
+       dest: #pathtosave#
     - name: upload file
       shell: |
-        lftp rdstore3 -u ftpuser,ftpuser<<EOF
+        lftp #ftpserver# -u #ftpuser#,#ftppassword#<<EOF
         cd /Infra/esxi_config
-        mirror -R /home/admin/backup/ /Infra/esxi_config
+        mirror -R #SourcePath# #DestPath#
         bye
         EOF
       register: result
