@@ -1,0 +1,21 @@
+- hosts: all
+  vars_files:
+    - password.yml      
+  gather_facts: False
+  tasks:
+    - name: Save the ESXi configuration On FTP
+      vmware_cfg_backup:
+       hostname: '{{ ansible_host }}'
+       username: root
+       password: '{{ password }}'
+       validate_certs: no
+       state: saved
+       dest: /home/admin/backup
+    - name: upload file
+      shell: |
+        lftp rdstore3 -u ftpuser,ftpuser<<EOF
+        cd /Infra/esxi_config
+        mirror -R /home/admin/backup/ /Infra/esxi_config
+        bye
+        EOF
+      register: result

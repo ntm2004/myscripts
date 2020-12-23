@@ -1,0 +1,22 @@
+- hosts: localhost
+  gather_facts: False
+  vars_prompt:
+    - name: "esxi_hostname"
+      prompt: "Esxi Hostname"
+      private: no
+    - name: "esxi_username"
+      prompt: "Esxi Username"
+      private: no
+    - name: "esxi_password"
+      prompt: "Esxi Password"
+    - name: "file_name"
+      prompt: "File Name"
+  tasks:
+   -  name: Restore the ESXi configuration From FTP
+      vmware_cfg_backup:
+       hostname: '{{ esxi_hostname }}'
+       username: '{{ esxi_username }}'
+       password: '{{ esxi_password }}'
+       validate_certs: no
+       state: loaded
+       src: '/home/admin/backup/{{ file_name }}'
